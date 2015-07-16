@@ -1,0 +1,124 @@
+#!/bin/bash
+# cli1-3.bash
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${ANSCOLOR} Good! So far, you've learned the following bash commands:${COLRESET}"
+	echo "${PROMPT}${CMDCOLOR}cd name_of_directory${COLRESET}${ANSCOLOR} for entering 1 directory at once${COLRESET}"
+	echo "${PROMPT}${CMDCOLOR}cd ..${COLRESET}${ANSCOLOR} for getting back out of it${COLRESET}"
+	echo "${PROMPTCOLOR}=>${QCOLOR} Goodbye! See you on your next challenge!${COLRESET}"
+	exit
+}
+
+function question1 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Confirm that we are on the ~/workspace folder by getting the current directory path${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 == "pwd" ]]; then
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} Our current directory path is ${CMDCOLOR}$(pwd)${COLRESET}${ANSCOLOR}${COLRESET}"
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} I can't recognize the ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command, try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Now that we are on the ${CMDCOLOR}$(pwd)${COLRESET}${QCOLOR} directory, list its content to confirm the existance of the ${OUTCOLOR}dir1${COLRESET}${QCOLOR} directory${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ "$qa2" == "ls" ]]; then
+		ls
+		addpoints
+		question3
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} Nope. How do you 'list' the directory contents in Bash?. Try it without any option.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+function question3 {	
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} In fact, the ${OUTCOLOR}dir1${QCOLOR} is there, lets enter it:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa3
+	if [[ "$qa3" == "cd" && $1 == "" ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR} cd${COLRESET}${ERRCOLOR} is the right command, but you are missing the right argument. Try again.${COLRESET}"
+		question3
+	elif [[ "$qa3" == "cd dir1" ]]; then
+		changedir dir1
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} You are now inside the ${OUTCOLOR}dir1${ANSCOLOR} directory, the 'change directories' command helps you on doing that.${COLRESET}"
+		addpoints
+		question4
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} I can't recognize the ${CMDCOLOR}$qa3${COLRESET}${ERRCOLOR} command, try again.${COLRESET}"
+		substractpoints
+		question3
+	fi
+}
+
+function question4 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Execute the ${OUTCOLOR}pwd${QCOLOR} again just for comparing the path we got earlier.${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa4
+	if [[ $qa4 == "pwd" ]]; then
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} Our current directory path is ${CMDCOLOR}$(pwd)${COLRESET}${ANSCOLOR}${COLRESET}"
+		addpoints
+		question5
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} I can't recognize the ${CMDCOLOR}$qa4${COLRESET}${ERRCOLOR} command, try again.${COLRESET}"
+		substractpoints
+		question4
+	fi
+}
+
+function question5 {
+	echo "${PROMPTCOLOR}TASK: ${ANSCOLOR}Ok, lets get out of this directory. Remember how?:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa5
+	if [[ "$qa5" != "cd .." ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR} $qa5${COLRESET}${ERRCOLOR} won't get you out of this directory. Try again.${COLRESET}"
+		substractpoints
+		question5
+	else
+		changedir ..
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} Tadaaah! The ${CMDCOLOR}$qa5${COLRESET}${ANSCOLOR} command goes back 1 directory. Now you know how to navigate inside and outside directories.${COLRESET}"
+		goodbye
+		addpoints
+	fi
+}
+
+
+question1

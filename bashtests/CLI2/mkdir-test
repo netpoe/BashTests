@@ -1,0 +1,81 @@
+#!/bin/bash
+#mkdir-test
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${ANSCOLOR} Cool, this simple task will make you twice as productive, here are your total points:${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=>${QCOLOR} Keep on going with the CLI course, see you next time!${COLRESET}"
+	exit
+}
+function check_file_tree_qa1 {
+	changedir test-website
+	if [[ -d "css" && -d "js" && -d "img" ]]; then
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Nice! Your workspace directory has now a ${OUTCOLOR}test-website${ANSCOLOR} directory with 3 directories inside it.${COLRESET}"
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}You are missing the right children directories. Try again.${COLRESET}"
+		changedir ..
+		rm -r test-website
+		question1
+	fi
+}
+
+function question1 {
+	if [[ -d "test-website" ]]; then
+		rm -R test-website
+	fi
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Create a directory called 'test-website' with the ${OUTCOLOR}css/ img/ js/${QCOLOR} directories inside it, ${OUTCOLOR}ALL AT ONCE:${QCOLOR}${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 =~ (^mkdir ? test-website\/?) && $qa1 =~ (\/css) && $qa1 =~ (\/js) && $qa1 =~ (\/img) ]]; then
+		echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}You've input the ${CMDCOLOR}$qa1${ANSCOLOR} command, hit enter to test it: ${COLRESET}"
+		read -r key_press
+		mkdir test-website test-website/css test-website/img test-website/js 
+		check_file_tree_qa1
+	elif [[ $qa1 =~ (^mkdir ?) && ! $qa1 =~ (test-website\/?) ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command does not include the proper parent directory name. Try again.${COLRESET}"
+		substractpoints
+		question1
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command will not create the proper directories all at once. Try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+
+
+
+
+question1

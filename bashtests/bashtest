@@ -1,0 +1,51 @@
+#!/bin/bash
+#bashtest init
+
+arg=$1
+
+# Helper funcs
+function changedir {
+	cd "$1"
+}
+
+function runtestfile {
+	# read -r ans
+	case $arg in
+	cli-1-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
+		"${BASHDIR}/bashtests/CLI1/$arg"
+		;;
+	cli-2-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
+		"${BASHDIR}/bashtests/CLI1/$arg"
+		;;
+	cli-3-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
+		"${BASHDIR}/bashtests/CLI1/$arg"
+		;;
+	cli-4-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
+		"${BASHDIR}/bashtests/CLI1/$arg"
+		;;
+	mkdir-test ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}"
+		"${BASHDIR}/bashtests/CLI2/$arg"
+	  ;;
+	touch-test ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}"
+		"${BASHDIR}/bashtests/CLI2/$arg"
+	  ;;
+	remove-test ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}"
+		"${BASHDIR}/bashtests/CLI2/$arg"
+	  ;;
+	move-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
+		"${BASHDIR}/bashtests/CLI3/$arg"
+	  ;;
+	rename-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
+		"${BASHDIR}/bashtests/CLI3/$arg"
+	  ;;
+	*) echo "The $arg argument can't be recognized. Try again."
+	  ;;
+	esac
+}
+
+
+if [[ -z "$arg" ]]; then
+	echo "The 'bashtest' command needs an argument in order to be executed.";
+else
+	runtestfile
+fi

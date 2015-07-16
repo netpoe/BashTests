@@ -1,0 +1,78 @@
+#!/bin/bash
+# cli1-2.bash
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 1`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${ANSCOLOR} Good! So far, you've learned the following bash commands:${COLRESET}"
+	echo "${PROMPT}${CMDCOLOR}ls${COLRESET}${ANSCOLOR} for listing files and directories inside the current directory${COLRESET}"
+	echo "${PROMPT}${CMDCOLOR}ls -a${COLRESET}${ANSCOLOR} for listing visible and hidden files inside the current directory${COLRESET}"
+	echo "${PROMPTCOLOR}=>${QCOLOR} Goodbye! See you on your next challenge!${COLRESET}"
+	exit
+}
+
+function question1 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Our file tree has some directories on it, list the files and directories that are on the ~/workspace parent directory:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ "$qa1" == "ls" ]]; then
+		ls
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} Nope. How do you 'list' the directory contents in Bash?. Try it without any option.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Lets make sure we have dotfiles available by listing the hidden files:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ "$qa2" != "ls -a" ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR} $qa2${COLRESET}${ERRCOLOR} won't list the hidden files and directories. Try again${COLRESET}"
+		substractpoints
+		question2
+	else
+		ls -a
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} That's right! The ${CMDCOLOR}$qa2${COLRESET}${ANSCOLOR} command option lists the dotfiles.${COLRESET}"
+		addpoints
+		goodbye
+	fi
+}
+
+
+
+
+
+question1

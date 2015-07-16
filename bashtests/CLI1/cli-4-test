@@ -1,0 +1,247 @@
+#!/bin/bash
+# cli1-4.bash
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+
+saidgreetings=0
+function greetings {
+	echo "${PROMPTCOLOR}=>${OUTCOLOR} $username?${ANSCOLOR} That's a good one!${COLRESET}"
+	saidgreetings=1
+	question1
+}
+
+function goodbye {
+	echo "${PROMPTCOLOR}=>${OUTCOLOR} $username!${ANSCOLOR} You've made it to the end, here are your total points:${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=>${QCOLOR} Keep on going with the CLI course, see you next time!${COLRESET}"
+	exit
+}
+
+# Begin test
+function begintest {
+	if [[ -d "test-dir1" ]]; then
+		rm -R test-dir1
+	fi
+	echo -n "${PROMPTCOLOR}=>${QCOLOR} Ready to challenge me? [yes/no]:${COLRESET}"
+	read -r yno
+	case $yno in
+
+		[yY] | [yY][Ee][Ss] )
+			echo -n "${PROMPTCOLOR}=>${QCOLOR} Excellent, choose a username:${COLRESET}"
+			read -r username
+			greetings
+			question1
+			;;
+		[nN] | [nN][oO] )
+			echo "${PROMPTCOLOR}=>${ERRCOLOR} Uhm, I can wait until you type 'yes'${COLRESET}"
+			begintest
+			;;
+		*) echo "Invalid input. Type either: 'yes' or 'no'"
+			begintest
+			;;
+	esac
+}
+
+# qa = question answer #number
+function question1 {
+	if [[ $saidgreetings -eq 0 ]]; then
+		greetings
+	else
+		echo "${PROMPTCOLOR}TASK: ${QCOLOR} All right $username, remember how to get the 'current user'?:${COLRESET}"
+		echo -n "${PROMPT}"
+		read -r qa1
+	fi
+	if [[ "$qa1" == "whoami" ]]; then
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} That's it! The ${CMDCOLOR}whoami${COLRESET}${ANSCOLOR} command outputs the current logged in user: ${OUTCOLOR}$(whoami)${COLRESET}"
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} Ehm, the ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command does not output the current user, try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Lets create a directory called 'test-dir1', remember how?${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ "$qa2" == "mkdir" && $1 == "" ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR}mkdir${COLRESET}${ERRCOLOR} is the right command, but you are missing the directory name. Try again.${COLRESET}"
+		question2
+	elif [[ "$qa2" == "mkdir test-dir1" ]]; then
+		mkdir test-dir1
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} Cool! We now have a ${OUTCOLOR}test-dir1${ANSCOLOR} directory.${COLRESET}"
+		addpoints
+		question3
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} You typed the ${CMDCOLOR}$qa2${COLRESET}${ERRCOLOR} command for making directories, are you creating the right directory?. Try again.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+function question3 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Make sure that the 'test-dir1' was created by listing the current directory contents${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa3
+	if [[ "$qa3" == "ls" ]]; then
+		ls
+		addpoints
+		question4
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}$username, how do you 'list' the directory contents in Bash?. Try again${COLRESET}"
+		substractpoints
+		question3
+	fi
+}
+
+function question4 {	
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}In fact, the ${OUTCOLOR}test-dir1${QCOLOR} is there, lets enter it${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa4
+	if [[ "$qa4" == "cd" && $1 == "" ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR}cd${COLRESET}${ERRCOLOR} is the right command, but you are missing the right argument. Try again.${COLRESET}"
+		question4
+	elif [[ "$qa4" == "cd test-dir1" ]]; then
+		changedir test-dir1
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} You are now inside the ${OUTCOLOR}test-dir1${ANSCOLOR} directory, the 'change directories' command helps you on doing that.${COLRESET}"
+		addpoints
+		question5
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} I can't recognize the ${CMDCOLOR}$qa4${COLRESET}${ERRCOLOR} command, try again.${COLRESET}"
+		substractpoints
+		question4
+	fi
+}
+
+function question5 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Confirm that we've entered by printing the 'path to the working directory':${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa5
+	if [[ $qa5 == "pwd" ]]; then
+		question6
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}I can't recognize the ${CMDCOLOR}$qa5${COLRESET}${ERRCOLOR} command, try again.${COLRESET}"
+		substractpoints
+		question5
+	fi
+}
+
+function question6 {
+	echo "${PROMPTCOLOR}=>${ANSCOLOR} Our current directory path is ${CMDCOLOR}$(pwd)${COLRESET}${ANSCOLOR}${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}It's time to create a file with the name ${OUTCOLOR}test-file1.txt${COLRESET}:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa6
+	if [[ "$qa6" == "touch" && $1 == "" ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR}touch${COLRESET}${ERRCOLOR} is the right command, but you are missing the right argument. Try again.${COLRESET}"
+		question6
+	elif [[ $qa6 == "touch test-file1.txt" ]]; then
+		touch test-file1.txt
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} You've created a ${OUTCOLOR}test-file1.txt${ANSCOLOR} file${COLRESET}"
+		addpoints
+		question7
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} I can't recognize the ${CMDCOLOR}$qa6${COLRESET}${ERRCOLOR} command, try again.${COLRESET}"
+		substractpoints
+		question6
+	fi
+}
+
+function question7 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Lets make sure we have the double dots available for exiting by listing the hidden files${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa7
+	if [[ "$qa7" != "ls -a" ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR} $qa7${COLRESET}${ERRCOLOR} won't list the hidden files and directories. Try again${COLRESET}"
+		substractpoints
+		question7
+	else
+		ls -a
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} That's right! The ${CMDCOLOR}$qa7${COLRESET}${ANSCOLOR} command lists the dotfiles.${COLRESET}"
+		addpoints
+		question8
+	fi
+}
+
+function question8 {
+	echo "${PROMPTCOLOR}TASK: ${ANSCOLOR} Ok, lets get out of this directory. Remember how?${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa8
+	if [[ "$qa8" != "cd .." ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${CMDCOLOR} $qa8${COLRESET}${ERRCOLOR} won't get you out of this directory. Try again.${COLRESET}"
+		substractpoints
+		question8
+	else
+		changedir ..
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} Tadaaah! The ${CMDCOLOR}$qa8${COLRESET}${ANSCOLOR} command goes back 1 directory. Now you know how to navigate inside and outside directories.${COLRESET}"
+		question9
+		addpoints
+	fi
+}
+
+function question9 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR} Last challenge! List files, directories and dotfiles details in a vertical layout:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa9
+	if [[ "$qa9" == "ls -al" ]]; then
+		ls -al
+		echo "${PROMPTCOLOR}=>${CMDCOLOR} $qa9${COLRESET}${ANSCOLOR} lists files, directories and dotfiles details in a vertical layout.${COLRESET}"
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} This means that you can combine command options using a single hyphen.${COLRESET}"
+		goodbye
+	elif [[ $qa9 == "ls -la" ]]; then
+		ls -al
+		echo "${PROMPTCOLOR}=>${CMDCOLOR} $qa9${COLRESET}${ANSCOLOR} lists files, directories and dotfiles details in a vertical layout.${COLRESET}"
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} This means that you can combine command options using a single hyphen.${COLRESET}"
+		goodbye
+	elif [[ $qa9 == "ls -l -a" ]]; then
+		ls -al
+		echo "${PROMPTCOLOR}=>${CMDCOLOR} $qa9${COLRESET}${ANSCOLOR} lists files, directories and dotfiles details in a vertical layout.${COLRESET}"
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} This means that you can combine command options using a single hyphen too.${COLRESET}"
+		goodbye
+	elif [[ $qa9 == "ls -a -l" ]]; then
+		ls -al
+		echo "${PROMPTCOLOR}=>${CMDCOLOR} $qa9${COLRESET}${ANSCOLOR} lists files, directories and dotfiles details in a vertical layout.${COLRESET}"
+		echo "${PROMPTCOLOR}=>${ANSCOLOR} This means that you can combine command options using a single hyphen too.${COLRESET}"
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR} I can't recognize the ${CMDCOLOR}$qa9${COLRESET}${ERRCOLOR} command as a way of outputting what's being requested. Try again.${COLRESET}"
+		substractpoints
+		question9
+	fi
+}
+
+
+
+begintest

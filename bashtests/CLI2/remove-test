@@ -1,0 +1,124 @@
+#!/bin/bash
+# remove-test
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${ANSCOLOR} Removing files and directories increases your developing speed but you should use these commands with caution.${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=>${QCOLOR} Keep on going with the CLI course, see you next time!${COLRESET}"
+	exit
+}
+
+function question1 {
+	if [[ ! -d "test-website/js" ]]; then
+		mkdir test-website/js
+	fi
+	if [[ ! -f "test-website/js/scripts.js" ]]; then
+		touch test-website/js/scripts.js
+	fi
+	if [[ ! -d "test-website/css" ]]; then
+		mkdir test-website/css
+		touch test-website/css/styles.css
+	fi
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}All right! Start by removing the ${OUTCOLOR}test-website/js/scripts.js${QCOLOR} file directly from your ~/workspace directory:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 =~ (^rm test-website\/js\/scripts.js) ]]; then
+		rm test-website/js/scripts.js
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Good! The ${OUTCOLOR}scripts.js${ANSCOLOR} is gone, lets proceed.${COLRESET}"
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command will not delete the requested file.${COLRESET}"
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}NOTE: No -option is needed for this command as we are removing files not non-empty directories. Try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Our ${OUTCOLOR}test-website/js${ANSCOLOR} is empty now, remove this empty directory directly from your ~/workspace folder:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ $qa2 =~ (^rmdir test-website\/js\/?) ]]; then
+		rmdir test-website/js
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Directory removed! Empty directories may be removed with the ${CMDCOLOR}rmdir name_of_directory${ANSCOLOR} command.${COLRESET}"
+		addpoints
+		question3 
+	else 
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa2${COLRESET}${ERRCOLOR} command will not delete the requested directory.${COLRESET}"
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}NOTE: We are removing an empty directory so this should be pretty straight forward. Try again.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+function question3 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Remove the entire ${OUTCOLOR}test-website/css${QCOLOR} directory directly from your ~/workspace folder.${COLRESET}"
+	echo "${PROMPTCOLOR}CONSIDER: ${QCOLOR}Add an option so the terminal asks for confirmation and use a single hyphen.${COLRESET}"
+	echo "${PROMPTCOLOR}REMEMBER: ${QCOLOR}The terminal requests for a letter ${OUTCOLOR}y${QCOLOR} for yes and a letter ${OUTCOLOR}n${QCOLOR} for no:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa3
+	if [[ $qa3 =~ (^rm -ri test-website\/css\/?) || $qa3 =~ (^rm -ir test-website\/css\/?) ]]; then
+		rm -ir test-website/css
+		if [[ -f "test-website/css/styles.css" ]]; then
+			echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}You input the right command but the directory was not removed because you didn't input a letter ${OUTCOLOR}Y${COLRESET}${ERRCOLOR}. Try again.${COLRESET}"
+			question3
+		fi
+		if [[ -d "test-website/css" ]]; then
+			echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}You input the right command but the directory was not removed because you didn't input a letter ${OUTCOLOR}Y${COLRESET}${ERRCOLOR}. Try again.${COLRESET}"
+			question3
+		fi
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}The full directory was removed! Non-empty directories may be removed with the ${CMDCOLOR}rm -r name_of_directory${ANSCOLOR} command.${COLRESET}"
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Additionally, you can add the ${CMDCOLOR}-i${ANSCOLOR} option to request confirmation.${COLRESET}"
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa3${COLRESET}${ERRCOLOR} command will not delete the requested directory and its content. Try again.${COLRESET}"
+		substractpoints
+		question3
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+question1

@@ -1,0 +1,181 @@
+#!/bin/bash
+# move-test
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${QCOLOR} Moving files and directories using the CLI saves you a lot of development time.${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=>${QCOLOR} Keep on going with the CLI course, see you next time!${COLRESET}"
+	exit
+}
+
+function question1 {
+	if [[ -d "test-website/" ]]; then
+		rm -r test-website
+	fi
+	if [[ -d "config/" ]]; then
+		rm -r config
+	fi
+	if [[ ! -d "test-website/" ]]; then
+		mkdir test-website/
+		mkdir test-website/img
+		mkdir test-website/config/
+		touch test-website/index.html
+		touch test-website/img/logo.png
+		touch test-website/.website-config
+	fi
+	echo "${PROMPTCOLOR}=> ${QCOLOR}We created a new ${OUTCOLOR}test-website/config/${QCOLOR} directory.${COLRESET}"
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Start by moving the ${OUTCOLOR}test-website/.website-config${QCOLOR} dotfile to the ${OUTCOLOR}test-website/config/${QCOLOR} directory. Directly from your ~/workspace directory:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 =~ (^mv test-website\/.website-config test-website\/config\/?) ]]; then
+		mv test-website/.website-config test-website/config
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Good! The ${OUTCOLOR}.website-config${ANSCOLOR} was moved to the corresponding folder, lets proceed.${COLRESET}"
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command will not move the requested file to the requested directory.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Move the ${OUTCOLOR}test-website/config/${QCOLOR} non-empty directory to the ${OUTCOLOR}~/workspace${QCOLOR} directory:${COLRESET}"
+	echo "${PROMPTCOLOR}CONSIDER: ${QCOLOR}You can either use ${OUTCOLOR}dot notation${QCOLOR} or the current directory path.${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ $qa2 =~ (^mv test-website\/config\/? .) || $qa2 =~ (^mv test-website\/config\/? \~\/workspace\/?) ]]; then
+		mv test-website/config .
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}The ${OUTCOLOR}test-website/config/${ANSCOLOR} directory was moved together with its content.${COLRESET}"
+		addpoints
+		bonustask
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa2${COLRESET}${ERRCOLOR} command will not move the requested directory to the destination directory.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+function bonustask {
+	echo "${PROMPTCOLOR}=> ${ANSCOLOR}It is possible to move multiple files or directories at once.${COLRESET}"
+	echo -n "${PROMPTCOLOR}=> ${QCOLOR}Would you like to take a bonus challenge? [y/n]: ${COLRESET}"
+	read -r yno
+	case $yno in
+		[yY] | [yY][Ee][Ss] )
+			echo "${PROMPTCOLOR}=>${ANSCOLOR} Excellent, we'll create an extra directory in the ${OUTCOLOR}test-website/${ANSCOLOR} folder:${COLRESET}"
+			mkdir test-website/multiple/ test-website/multiple/dir-1 test-website/multiple/dir-2 test-website/multiple/dir-3
+			touch test-website/multiple/file.txt test-website/multiple/another-file.md test-website/multiple/random-file.html
+			explanation
+			;;
+		[nN] | [n|N][O|o] )
+			echo "${PROMPTCOLOR}=>${ERRCOLOR} No problem, you can continue without this knowledge.${COLRESET}"
+			goodbye
+			;;
+		*) echo "Invalid input. Type: 'yes' or 'no'"
+			bonustask
+			;;
+	esac
+}
+
+function explanation {
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}Multiple files or directories can be moved by specifying an ${OUTCOLOR}*IDENTIFIER* ${ANSCOLOR}(press enter)${COLRESET}" 
+	read -r key_press
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}*IDENTIFIERS*${ANSCOLOR} are patterns that files or directories' names share.${COLRESET}" 
+	read -r key_press
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}Resync the file tree and explore the new ${OUTCOLOR}test-website/multiple/${ANSCOLOR} directory (using the file tree only).${COLRESET}" 
+	read -r key_press
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}Did you spot the name patterns?${COLRESET}" 
+	read -r key_press
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}In order to move multiple files or directories the command must have this structure:${COLRESET}" 
+	read -r key_press
+	echo -n "${PROMPTCOLOR}=> ${CMDCOLOR}mv *IDENTIFIER* destination${COLRESET}" 
+	read -r key_press
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}The name pattern must go between the '* *' symbols. Time to try it by yourself:${COLRESET}" 
+	read -r key_press
+	question3
+}
+
+function question3 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Move the 3 files inside the ${OUTCOLOR}test-website/multiple/${QCOLOR} directory to the ${OUTCOLOR}config/${QCOLOR} directory:${COLRESET}" 
+	echo -n "${PROMPT}"
+	read -r qa3
+	if [[ $qa3 =~ (^mv test-website\/multiple\/\*file\* config\/? ?) ]]; then
+		mv test-website/multiple/*file* config
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Almost there! The ${OUTCOLOR}test-website/multiple/${ANSCOLOR} directory files were moved to the specified directory.${COLRESET}"
+		addpoints
+		addpoints
+		question4
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa3${COLRESET}${ERRCOLOR} command will not move all the requested directory files to the destination directory.${COLRESET}"
+		substractpoints
+		substractpoints
+		question3
+	fi
+}
+
+function question4 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Move the 3 directories inside the ${OUTCOLOR}test-website/multiple/${QCOLOR} directory to the ${OUTCOLOR}config/${QCOLOR} directory:${COLRESET}" 
+	echo -n "${PROMPT}"
+	read -r qa4
+	if [[ $qa4 =~ (^mv test-website\/multiple\/\*dir\* config\/? ?) ]]; then
+		mv test-website/multiple/*dir* config
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Perfect! The ${OUTCOLOR}test-website/multiple/${ANSCOLOR} children directories were moved to the specified directory.${COLRESET}"
+		addpoints
+		addpoints
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa4${COLRESET}${ERRCOLOR} command will not move all the requested directory files to the destination directory.${COLRESET}"
+		substractpoints
+		substractpoints
+		question4
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+question1

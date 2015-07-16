@@ -1,0 +1,127 @@
+#!/bin/bash
+# touch-test
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${ANSCOLOR} That was a tough one! Here are your total points:${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=>${QCOLOR} Keep on going with the CLI course, see you next time!${COLRESET}"
+	exit
+}
+
+function check_file_tree_qa1 {
+	changedir test-website
+	if [[ -f "index.html" && -f ".website-config" && -f "css/styles.css" && -f "img/logo.png" && -f "js/scripts.js" ]]; then
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Excellent! Your ${OUTCOLOR}test-website${ANSCOLOR} directory looks more like a real web project now.${COLRESET}"
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}You are missing the right children files. Try again.${COLRESET}"
+		changedir ..
+		rm -r test-website
+		mkdir test-website test-website/css test-website/img test-website/js 
+		question1
+	fi
+}
+function list_files {
+	echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}You've input the ${CMDCOLOR}$qa2${ANSCOLOR} command, hit enter to test it: ${COLRESET}"
+	read -r key_press
+	# ls -al "test-website/css"
+	echo "${PROMPTCOLOR}=> ${ANSCOLOR}Right! Listing improves your development speed by not having to 'cd' into every folder.${COLRESET}"
+	question3
+}
+
+function question1 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Create the following files directly from your ~/workspace directory:${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${OUTCOLOR}test-website/index.html ${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${OUTCOLOR}test-website/.website-config${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${OUTCOLOR}test-website/css/styles.css${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${OUTCOLOR}test-website/img/logo.png${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${OUTCOLOR}test-website/js/scripts.js${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 =~ (^touch ? test-website\/?) && $qa1 =~ (\/index.html) && $qa1 =~ (\/.website-config) && $qa1 =~ (\/css/styles.css) && $qa1 =~ (\/img/logo.png) && $qa1 =~ (\/js/scripts.js) ]]; then
+		echo -n "${PROMPTCOLOR}=> ${ANSCOLOR}You've input the ${CMDCOLOR}$qa1${ANSCOLOR} command, hit enter to test it: ${COLRESET}"
+		read -r key_press
+		touch test-website/index.html test-website/.website-config test-website/css/styles.css test-website/img/logo.png test-website/js/scripts.js
+		check_file_tree_qa1
+	elif [[ $qa1 =~ (^touch ?) && ! $qa1 =~ (test-website\/?) ]]; then
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command does not include the proper parent directory name. Try again.${COLRESET}"
+		substractpoints
+		question1
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command will not create the proper files in the proper directory all at once. Try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}From your ~/workspace directory, list the test-website/css directory content including the visible and hidden files in a vertical column layout:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ $qa2 =~ (^ls ? -al) && $qa2 =~ ( test-website\/css\/?) ]]; then
+		list_files
+	elif [[ $qa2 =~ (^ls ? -la) && $qa2 =~ ( test-website\/css\/?) ]]; then
+		list_files
+	elif [[ $qa2 =~ (^ls ? -l -a) && $qa2 =~ ( test-website\/css\/?) ]]; then
+		list_files
+	elif [[ $qa2 =~ (^ls ? -a -l) && $qa2 =~ ( test-website\/css\/?) ]]; then
+		list_files
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa2${COLRESET}${ERRCOLOR} command will not list the proper directory. Try again.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+function question3 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Last but not least, answer this question:${COLRESET}"
+	echo -n "${PROMPTCOLOR}=> ${QCOLOR}What command would you use to create available space on your terminal screen?: ${COLRESET}"
+	read -r qa3	
+	if [[ $qa3 =~ (clear ?) ]]; then
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}You are right! The ${CMDCOLOR}clear${COLRESET}${ANSCOLOR} command clears your terminal screen without erasing content${COLRESET}"
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}The ${CMDCOLOR}ctrl + l${COLRESET}${ANSCOLOR} key combination performs the same thing. Nice trick ah?${COLRESET}"
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa3${COLRESET}${ERRCOLOR} command will not clear your terminal screen. Try again.${COLRESET}"
+	fi
+}
+
+
+
+
+
+
+
+question1
