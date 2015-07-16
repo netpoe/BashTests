@@ -1,0 +1,152 @@
+#!/bin/bash
+# copy-test
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=> ${QCOLOR}Understanding the 'root' directory concept together with the absolute and relative paths decreases your project development time.${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=> ${QCOLOR} Happy coding! See you on the next unit!${COLRESET}"
+	exit
+}
+
+function question1 {
+	if [[ $(pwd) != "/home/codio/workspace" ]]; then
+		changedir ~/workspace
+	fi
+	# if [[ $(pwd) != "/Volumes/Seagate Backup Plus Drive/htdocs/Bash/workspace" ]]; then
+	# 	changedir "$BASHDIR/workspace"
+	# fi
+	rm -r nested-directories
+	mkdir nested-directories/ nested-directories/nested-level-1 nested-directories/nested-level-1/nested-level-2 nested-directories/nested-level-1/nested-level-2/nested-level-3
+	if [[ ! -d "config" ]]; then
+		mkdir config
+		touch	config/.website-config
+		touch config/logo-dark.png
+		touch config/logo-light.png
+	fi
+	echo "${PROMPTCOLOR}=> ${QCOLOR}Absolute paths start from the ${OUTCOLOR}/${QCOLOR} root directory.${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${QCOLOR}You are currently on the ${OUTCOLOR}$(pwd)${QCOLOR} directory.${COLRESET}"
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}${CMDCOLOR}cd${QCOLOR} into the ${OUTCOLOR}nested-directories/nested-level-1/${QCOLOR} directory by using an ${OUTCOLOR}absolute path${QCOLOR}:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 =~ (^cd \/home\/codio\/workspace\/nested-directories\/nested-level-1\/?) ]]; then
+		# cd /home/codio/workspace/nested-directories/nested-level-1/
+		changedir nested-directories/nested-level-1
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Good! You are currently on the ${OUTCOLOR}$(pwd)${ANSCOLOR} directory. Proceed.${COLRESET}"
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command won't change directories into the right absolute path to the requested directory. Try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}=> ${QCOLOR}Relative paths start from the ${OUTCOLOR}current working directory${QCOLOR}.${COLRESET}"
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}${CMDCOLOR}cd${QCOLOR} into the ${OUTCOLOR}nested-level-3/${QCOLOR} directory by using a ${OUTCOLOR}relative path${QCOLOR}:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ $qa2 =~ (^cd nested-level-2\/nested-level-3\/?) ]]; then
+		# cd nested-level-2/nested-level-3
+		changedir nested-level-2/nested-level-3
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Nice! You are currently on the ${OUTCOLOR}$(pwd)${ANSCOLOR} directory. Proceed.${COLRESET}"
+		addpoints
+		question3
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa2${COLRESET}${ERRCOLOR} command won't change directories into the right relative path to the requested directory. Try again.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+function question3 {
+	echo "${PROMPTCOLOR}=> ${QCOLOR}Relative and absolute paths show pretty useful when using other file system commands.${COLRESET}"
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Move the entire ${OUTCOLOR}~/workspace/config/${QCOLOR} directory to the ${OUTCOLOR}nested-level-1/${QCOLOR} directory by using ${OUTCOLOR}absolute paths${QCOLOR} on both arguments:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa3
+	if [[ $qa3 =~ (^mv \/home\/codio\/workspace\/config\/? \/home\/codio\/workspace\/nested-directories\/nested-level-1\/?) ]]; then
+		# mv "$BASHDIR/workspace/config" "$BASHDIR/workspace/nested-directories/nested-level-1"
+		mv ~/workspace/config ~/workspace/nested-directories/nested-level-1
+		# mv /home/codio/workspace/config /home/codio/workspace/nested-directories/nested-level-1
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Directory successfully moved! Proceed.${COLRESET}"
+		addpoints
+		question4
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa3${COLRESET}${ERRCOLOR} command won't move the requested directory to the requested destination. Try again.${COLRESET}"
+		substractpoints
+		question3
+	fi
+}  
+
+function question4 {
+	echo "${PROMPTCOLOR}=> ${QCOLOR}You are currently on the ${OUTCOLOR}$(pwd)${QCOLOR} directory.${COLRESET}"
+	echo "${PROMPTCOLOR}=> ${QCOLOR}If you were to go back 2 directory levels, you'd execute: ${CMDCOLOR}cd ../../${QCOLOR}${COLRESET}"
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Copy the entire ${OUTCOLOR}~/workspace/nested-directories/nested-level-1/config/${QCOLOR} non-empty directory to the ${OUTCOLOR}nested-level-3/${QCOLOR} current directory by using a ${OUTCOLOR}relative path${QCOLOR}:${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa4
+	if [[ $qa4 =~ (^cp -R ..\/..\/config .) || $qa4 =~ (^cp -R ..\/..\/config ~\/workspace\/nested-directories\/nested-level-1\/nested-level-2\/nested-level-3\/?) ]]; then
+		cp -R ../../config .
+		# cp -R ../../config ~/workspace/nested-directories/nested-level-1/nested-level-2/nested-level-3/
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Directory successfully copied!${COLRESET}"
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa4${COLRESET}${ERRCOLOR} command won't copy the requested directory to the requested destination. Try again.${COLRESET}"
+		echo "${PROMPTCOLOR}TIP: ${ANSCOLOR}Remember that the ${OUTCOLOR}.${COLRESET}${ANSCOLOR} dot character represents the current working directory.${COLRESET}"
+		echo "${PROMPTCOLOR}TIP: ${ANSCOLOR}Remember that the ${OUTCOLOR}..${COLRESET}${ANSCOLOR} double dots represent 'going back one level'. How many levels do you need to go back?.${COLRESET}"
+		echo "${PROMPTCOLOR}TIP: ${ANSCOLOR}Remember that the ${OUTCOLOR}-R${COLRESET}${ANSCOLOR} copy command option allows copying non-empty directories.${COLRESET}"
+		substractpoints
+		question4
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+question1

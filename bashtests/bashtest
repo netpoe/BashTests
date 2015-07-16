@@ -38,6 +38,12 @@ function runtestfile {
 	rename-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
 		"${BASHDIR}/bashtests/CLI3/$arg"
 	  ;;
+	copy-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
+		"${BASHDIR}/bashtests/CLI3/$arg"
+	  ;;
+	paths-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
+		"${BASHDIR}/bashtests/CLI3/$arg"
+	  ;;
 	*) echo "The $arg argument can't be recognized. Try again."
 	  ;;
 	esac

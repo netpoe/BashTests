@@ -1,0 +1,101 @@
+#!/bin/bash
+# copy-test
+
+# Vars group
+
+# Points
+totalpoints=1
+pospoints=2
+negpoints=1
+
+
+# Colors
+ERRCOLOR=`tput setaf 1`
+QCOLOR=`tput setaf 3`
+ANSCOLOR=`tput setaf 2`
+OUTCOLOR=`tput setaf 4`
+PROMPTCOLOR=`tput setaf 3`
+CMDCOLOR=`tput setaf 4`
+COLRESET=`tput sgr0`
+
+PROMPT="${COLRESET}codio ~/workspace $ ${COLRESET}"
+
+# Helper funcs
+function addpoints {
+	totalpoints=$(($totalpoints+$pospoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function substractpoints {
+	totalpoints=$(($totalpoints-$negpoints))
+	echo "${PROMPTCOLOR}=>${QCOLOR} Totalpoints: $totalpoints ${COLRESET}"
+}
+function changedir {
+	cd "$1"
+}
+function goodbye {
+	echo "${PROMPTCOLOR}=>${QCOLOR} The ${CMDCOLOR}cp${QCOLOR} command saves you 4 steps when copying files and folders.${COLRESET}"
+	addpoints
+	echo "${PROMPTCOLOR}=>${QCOLOR} Happy coding! See you next time!${COLRESET}"
+	exit
+}
+
+function question1 {
+	if [[ -d "test-website/" ]]; then
+		rm -r test-website
+	fi
+	if [[ ! -d "config/" ]]; then
+		mkdir config
+		touch config/.website-config
+	fi
+	if [[ -f "config/logo-light.png" ]]; then
+		rm -r config/*logo*
+	fi
+	if [[ ! -d "test-website/" ]]; then
+		mkdir test-website/
+		mkdir test-website/images
+		touch test-website/index.html
+		touch test-website/images/logo-light.png
+	fi
+	echo "${PROMPTCOLOR}=> ${QCOLOR}We need a second logo image file for our test-website project.${COLRESET}"
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Make a copy of the ${OUTCOLOR}test-website/images/logo-light.png${QCOLOR} PNG image file on the same directory and assign it the name: ${OUTCOLOR}logo-dark.png${QCOLOR}${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa1
+	if [[ $qa1 =~ (^cp test-website\/images\/logo-light.png test-website\/images\/logo-dark.png) ]]; then
+		cp test-website/images/logo-light.png test-website/images/logo-dark.png
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Success! The ${OUTCOLOR}test-website/images/logo-light.png${ANSCOLOR} file was copied and the ${OUTCOLOR}test-website/images/logo-dark.png${ANSCOLOR} was created.${COLRESET}"
+		addpoints
+		question2
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa1${COLRESET}${ERRCOLOR} command didn't copy the requested file to the requested directory. Try again.${COLRESET}"
+		substractpoints
+		question1
+	fi
+}
+
+function question2 {
+	echo "${PROMPTCOLOR}TASK: ${QCOLOR}Copy the ${OUTCOLOR}test-website/images/${QCOLOR} directory content to the ${OUTCOLOR}~/workspace/config/${QCOLOR} directory without copying the directory itself${COLRESET}"
+	echo -n "${PROMPT}"
+	read -r qa2
+	if [[ $qa2 =~ (^cp -R test-website\/images\/. config\/?) || $qa2 =~ (^cp -R test-website\/images\/. \~\/workspace\/config\/?) ]]; then
+		# cp -R test-website/images/. ~/workspace/config/
+		cp -R test-website/images/. config
+		echo "${PROMPTCOLOR}=> ${ANSCOLOR}Success! The ${OUTCOLOR}test-website/images/${ANSCOLOR} directory content was copied to the ${OUTCOLOR}~/workspace/config${ANSCOLOR} folder.${COLRESET}"
+		goodbye
+	else
+		echo "${PROMPTCOLOR}ERROR: ${ERRCOLOR}The ${CMDCOLOR}$qa2${COLRESET}${ERRCOLOR} command didn't copy the requested directory content to the correspondent directory. Try again.${COLRESET}"
+		substractpoints
+		question2
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+question1
