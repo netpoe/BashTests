@@ -11,6 +11,18 @@ function changedir {
 function runtestfile {
 	# read -r ans
 	case $arg in
+	cli-1-1 ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI1/$arg.sh"
+		;;
+	cli-1-2 ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI1/$arg.sh"
+		;;
+	cli-1-3 ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI1/$arg.sh"
+		;;
+	cli-1-4 ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI1/$arg.sh"
+		;;
 	cli-1-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
 		"${BASHDIR}/bashtests/CLI1/$arg"
 		;;
@@ -44,11 +56,22 @@ function runtestfile {
 	paths-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
 		"${BASHDIR}/bashtests/CLI3/$arg"
 	  ;;
+	echo-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI4/$arg.sh"
+	  ;;
+	cat-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI4/$arg.sh"
+	  ;;
+	find-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI4/$arg.sh"
+	  ;;
+	grep-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI4/$arg.sh"
+	  ;;
 	*) echo "The $arg argument can't be recognized. Try again."
 	  ;;
 	esac
 }
-
 
 if [[ -z "$arg" ]]; then
 	echo "The 'bashtest' command needs an argument in order to be executed.";

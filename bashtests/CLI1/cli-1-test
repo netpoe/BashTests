@@ -42,6 +42,7 @@ function goodbye {
 
 # qa# = question answer #number
 function question1 {
+	# bind '"^[OD": backward-char'
 	echo "${PROMPTCOLOR}TASK: ${QCOLOR} All right! Remember how to get the 'current user'?:${COLRESET}"
 	echo -n "${PROMPT}"
 	read -r qa1

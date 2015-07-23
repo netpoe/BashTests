@@ -1,0 +1,4 @@
+#!/bin/bash
+# erase history
+
+echo "" > ~/.bash_history
