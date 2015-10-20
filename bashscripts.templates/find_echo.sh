@@ -1,0 +1,2 @@
+find . -type f -not -name "errorLogs.js" -not -name "sqltests-fw.js" -path "*.js" -exec sh -c 'echo "var sqltest = require(\"./fw-sqltests.js\");\nvar workspace = sqltest.workspaceDirectory;\n\n\n/*\n Challenge tasks\n tasks[{Task description | Expected Query}]\n*/\nvar tasks = [\n];\n\n\n/*\n Init test\n sql.testCommands(user source file, database name, tasks array)\n*/\nsqltest.testCommands(\"sql-2-1/sql-2-1.sql\", \"people\", tasks);" > {}' \;
+find . -type f -name "Challenge*" -path "*.md" -exec sh -c 'echo "\n\n|||guidance\n### Correct answers:\n\n|||" > {}' \;

@@ -23,51 +23,60 @@ function runtestfile {
 	cli-1-4 ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}.sh"
 		"${BASHDIR}/bashtests/CLI1/$arg.sh"
 		;;
-	cli-1-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
-		"${BASHDIR}/bashtests/CLI1/$arg"
+	cli-2-1 ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI2/$arg.sh"
 		;;
-	cli-2-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
-		"${BASHDIR}/bashtests/CLI1/$arg"
+	cli-2-2 ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI2/$arg.sh"
 		;;
-	cli-3-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
-		"${BASHDIR}/bashtests/CLI1/$arg"
+	cli-2-3 ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI2/$arg.sh"
 		;;
-	cli-4-test ) chmod +x "${BASHDIR}/bashtests/CLI1/${arg}"
-		"${BASHDIR}/bashtests/CLI1/$arg"
+	cli-3-1 ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI3/$arg.sh"
 		;;
-	mkdir-test ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}"
-		"${BASHDIR}/bashtests/CLI2/$arg"
-	  ;;
-	touch-test ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}"
-		"${BASHDIR}/bashtests/CLI2/$arg"
-	  ;;
-	remove-test ) chmod +x "${BASHDIR}/bashtests/CLI2/${arg}"
-		"${BASHDIR}/bashtests/CLI2/$arg"
-	  ;;
-	move-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
-		"${BASHDIR}/bashtests/CLI3/$arg"
-	  ;;
-	rename-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
-		"${BASHDIR}/bashtests/CLI3/$arg"
-	  ;;
-	copy-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
-		"${BASHDIR}/bashtests/CLI3/$arg"
-	  ;;
-	paths-test ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}"
-		"${BASHDIR}/bashtests/CLI3/$arg"
-	  ;;
-	echo-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+	cli-3-2 ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI3/$arg.sh"
+		;;
+	cli-3-3 ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI3/$arg.sh"
+		;;
+	cli-3-4 ) chmod +x "${BASHDIR}/bashtests/CLI3/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI3/$arg.sh"
+		;;
+	cli-4-1 ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
 		"${BASHDIR}/bashtests/CLI4/$arg.sh"
-	  ;;
-	cat-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		;;
+	cli-4-2 ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
 		"${BASHDIR}/bashtests/CLI4/$arg.sh"
-	  ;;
-	find-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		;;
+	cli-4-3 ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
 		"${BASHDIR}/bashtests/CLI4/$arg.sh"
-	  ;;
-	grep-test ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
+		;;
+	cli-4-4 ) chmod +x "${BASHDIR}/bashtests/CLI4/${arg}.sh"
 		"${BASHDIR}/bashtests/CLI4/$arg.sh"
-	  ;;
+		;;
+	cli-5-1 ) chmod +x "${BASHDIR}/bashtests/CLI5/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI5/$arg.sh"
+		;;
+	cli-5-2 ) chmod +x "${BASHDIR}/bashtests/CLI5/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI5/$arg.sh"
+		;;
+	cli-5-3 ) chmod +x "${BASHDIR}/bashtests/CLI5/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI5/$arg.sh"
+		;;
+	cli-5-4 ) chmod +x "${BASHDIR}/bashtests/CLI5/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI5/$arg.sh"
+		;;
+	cli-7-1 ) chmod +x "${BASHDIR}/bashtests/CLI7/${arg}.sh"
+		"${BASHDIR}/bashtests/CLI7/$arg.sh"
+		;;
+	get-repos ) chmod +x "${SQL}/CodioSQL.Units/${arg}.sh"
+		"${SQL}/CodioSQL.Units/$arg.sh"
+		;;
+	update-repos ) chmod +x "${SQL}/CodioSQL.Units/${arg}.sh"
+		"${SQL}/CodioSQL.Units/$arg.sh"
+		;;
 	*) echo "The $arg argument can't be recognized. Try again."
 	  ;;
 	esac

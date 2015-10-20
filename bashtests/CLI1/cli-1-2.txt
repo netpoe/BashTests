@@ -1,4 +1,0 @@
-cli-1-2
-bashtest cli-1-2
-ls
-ls -a

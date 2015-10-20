@@ -1,0 +1,127 @@
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+pwd
+ls
+ls test-website/
+mkdir test-website/css
+touch test-website/css/styles.css
+mkdir test-website/js
+touch test-website/js/scripts.js
+clear
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+ls ~/workspace/test-website/css/
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+clear
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+clear
+pwd
+cd ..
+pwd
+grep "~" bashtests/CLI2/cli-2-2.txt 
+grep "~" bashtests/CLI2/cli-2-2.txt | sed -e "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | xargs sed -e "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | xargs sed -i "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | xargs sed -i "" "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | xargs sed -i " " "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | xargs sed "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | xargs sed -e "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | sed -e "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | sed -i "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | sed -i " ""s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | sed -i " " "s@~@$HOME@g"
+grep "~" bashtests/CLI2/cli-2-2.txt | sed -i "" "s@~@$HOME@g"
+cli-2-2
+bashtest cli-2-2
+cli-2-2
+bashtest cli-2-2
+cli-2-2

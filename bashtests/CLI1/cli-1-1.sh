@@ -2,70 +2,101 @@
 # bash_history edit
 
 bash_history=~/.bash_history
-check_file=cli-1-1.txt
-grep -A2000 -e "^cli-1-1" $bash_history > $check_file
+BASHDIR=/home/codio/workspace/.guides
+check_file=cli-1-1
+hist_file="$BASHDIR/bashtests/CLI1/$check_file.txt"
 
-check_file="$BASHDIR/bashtests/CLI1/$check_file"
+echo "$check_file" >> $bash_history
+grep -A2000 -e "^$check_file" $bash_history > "$BASHDIR/bashtests/CLI1/${check_file}.txt"
 
-q1=0
-q2=0
-q3=0
-q4=0
-q5=0
-q6=0
-q7=0
-# if [[ $q1 -eq 1 && $q2 -eq 1 && $q3 -eq 1 && $q4 -eq 1 && $q5 -eq 1 && $q6 -eq 1 && $q7 -eq 1 ]]
+# Must match for erasing history
+RES_HIST=0
+COUNT=0
+QCOUNT=2
 
-function goodbye {
-	if [[ $q1 -eq 1 && $q2 -eq 1 ]]; then
-		echo "That's it! The 'whoami' command outputs the current logged in user: $(whoami)"
-		echo "Our current directory path is $(pwd)"
-		# return 1
+# Reset history
+function reset_history {
+	if [[ $RES_HIST -eq $QCOUNT ]]; then
+		echo "$arg" > ~/.bash_history
 	fi
 }
 
-function tell_error {
-	case $1 in
-		"qa1" )
-			echo "1. Command does not output current user"
-			;;
-		"qa1" )
-			echo "2. Command does not output current working directory path"
-			;;
-		* )
-			exit 0
-			;;
-	esac
-}
-
-# Get the _current user_
-function question1 {
-	if grep -Fxq "whoami" "$check_file"
+function expect_command 
+{
+	if grep -Fxq "$1" "$hist_file"
 	then
-		q1=1
-		question2
-	else
-		tell_error "qa1"
+		response "$2" $COUNT
+	else 
+		tell_error "$2" $COUNT
 	fi
 }
 
-# Print the _path to the working directory_
-function question2 {
-	if grep -Fxq "pwd" "$check_file"
-	then
-		q2=1
-		goodbye
-	else
-		tell_error "qa2"
+function expect_commands 
+{
+	args_array=()
+	for (( i = 2; i <= $#; i++ )); do
+		args_array[i]=${!i}
+	done
+	for (( i = 2; i <= $#; i++ )); do		
+		if grep -Fxq "${args_array[$i]}" "$hist_file" || grep -Fxq "${args_array[$i]}/" "$hist_file" || grep -Fxq "${args_array[$i]} " "$hist_file"
+		then
+			found_arg="${args_array[$i]}"
+			response "$1" $COUNT
+			return
+		else
+			tell_error "$1" $COUNT
+			return
+		fi
+	done
+}
+
+function expect_file 
+{
+	if [[ -f "$1" ]]; then
+		response "$2" $COUNT
+	else 
+		tell_error "$2" $COUNT
+	fi
+}
+
+function expect_directory
+{
+	if [[ -d "$1" ]]; then
+		response "$2" $COUNT
+	else 
+		tell_error "$2" $COUNT
+	fi
+}
+
+function tell_error 
+{
+	echo -e "[Error  ] Task $2. Expected: $1. Try again."
+	test_command
+	# return 1
+}
+
+function response 
+{
+	echo -e "[Correct] Task $2. ${1}"
+	(( RES_HIST ++ ))
+	test_command
+}
+
+function test_command {
+	(( COUNT ++ ))
+	if [[ $COUNT -le $QCOUNT ]]; then
+		case $COUNT in
+			1 )
+				expect_command "whoami" "output current user"
+				;;
+			2 )
+				expect_command "pwd" "output current working directory path"
+				;;			
+		esac
+	else 
+		reset_history
 	fi
 }
 
 
-
-
-
-
-
-
-
-question1
+test_command

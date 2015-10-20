@@ -1,0 +1,97 @@
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+rm -Rf ~/workspace/test-website/css
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+rm -Rf /workspace/test-website/css
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+clear
+cli-2-3
+bashtest cli-2-3
+man set
+pwd
+mkdir workspace-cli6
+mkdir bashtests/CLI6
+touch bashtests/CLI6/loop.sh
+bash bashtests/CLI6/loop.sh 
+bashtests/CLI6/loop.sh 
+chmod +x bashtests/CLI6/loop.sh 
+bashtests/CLI6/loop.sh 
+bashtests/CLI6/loop.sh 
+bashtests/CLI6/loop.sh &
+ps
+ps
+bashtests/CLI6/loop.sh &
+bashtests/CLI6/loop.sh &
+clear
+pwd
+cd $BASHDIR
+cd /Volumes/Seagate\ Backup\ Plus\ Drive/htdocs/Bash/
+clear
+bashtests/CLI6/loop.sh &
+ps 
+kill 22101
+ps
+top
+kill 21992
+bashtests/CLI6/loop.sh &
+man ps
+clear
+ps
+ps -f
+fg
+bg
+exit
+bash
+man bash
+cd $BASHDIR
+exit
+pwd
+clear
+bashtest cli-2-3.sh
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3
+bashtest cli-2-3
+cli-2-3

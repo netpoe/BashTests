@@ -1,0 +1,20 @@
+cli-7-1
+bashtest cli-7-1
+export curr_user=$(whoami)
+cli-7-1
+bashtest cli-7-1
+cli-7-1
+bashtest cli-7-1
+cli-7-1
+bashtest cli-7-1
+cat ~/.bash_history
+exit
+bash
+exit
+bash
+cli-7-1
+bashtest cli-7-1
+cli-7-1
+bashtest cli-7-1
+echo $curr_user
+cli-7-1
